@@ -1,6 +1,7 @@
 ﻿
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Globalization;
 
 internal class Program
 {
@@ -9,7 +10,20 @@ internal class Program
 
     private static void Main(string[] args)
     {
-        double megaPixels = 2d;
+        double megaPixels;
+        string? input;
+        do
+        {
+            Console.Clear();
+            Console.Write("[2.00] Insert Megapixels: ");
+            input = Console.ReadLine();
+
+            // Default value 2 Megapixels
+            if (string.IsNullOrWhiteSpace(input))
+                input = "2";
+
+        } while (!double.TryParse(input, NumberStyles.Any, CultureInfo.CurrentCulture, out megaPixels));
+        
         string[] files = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory);
 
         foreach (var f in files) {
@@ -17,7 +31,8 @@ internal class Program
 
             if (imageExtensions.Contains(fi.Extension)) {
                 resizeImage(fi, megaPixels);
-            }            
+            }
+            Console.WriteLine("Resized: " + fi.Name);
         }
 
         foreach (var key in dictImagenes.Keys) {
